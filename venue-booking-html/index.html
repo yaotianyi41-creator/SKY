@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>场地预约</title>
+  <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+  <!-- 返回按钮 -->
+  <button class="back-btn" id="backBtn" style="display: none;">←</button>
+  
+  <!-- Toast提示 -->
+  <div class="toast" id="toast"></div>
+  
+  <!-- Modal弹窗 -->
+  <div class="modal" id="modal">
+    <div class="modal-content">
+      <div class="modal-title" id="modalTitle">提示</div>
+      <div class="modal-text" id="modalText"></div>
+      <div class="modal-buttons">
+        <button class="modal-btn cancel" id="modalCancel">取消</button>
+        <button class="modal-btn confirm" id="modalConfirm">确定</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 首页 -->
+  <div class="page home-page active" id="homePage">
+    <div class="home-banner">
+      <img src="" id="homeBannerImage" alt="场地">
+      <div class="home-banner-overlay">
+        <h1 class="home-title">欢迎来到我们的空间</h1>
+        <p class="home-subtitle">为您提供优质的办公场地预约服务</p>
+      </div>
+      <div class="home-banner-text">
+        <h2 id="homeBannerName"></h2>
+        <p id="homeBannerAddress"></p>
+      </div>
+    </div>
+    
+    <div class="home-secondary-image">
+      <img src="./images/venue-view.jpg" alt="江景">
+    </div>
+    
+    <div style="height: 80px;"></div>
+  </div>
+
+  <!-- 空间介绍页 -->
+  <div class="page space-page" id="spacePage">
+    <div class="info-section" style="margin-top: 20px;">
+      <div class="venue-header">
+        <div>
+          <div class="venue-name" id="spaceName"></div>
+          <div class="venue-tags" id="spaceTags">
+            <!-- 动态渲染 -->
+          </div>
+        </div>
+        <div class="rating-box">
+          <span class="rating-score" id="spaceRating">5.0</span>
+          <span class="rating-text">评分</span>
+        </div>
+      </div>
+      
+      <div class="info-row">
+        <span class="info-icon">📍</span>
+        <span class="info-text" id="spaceAddress"></span>
+      </div>
+      <div class="info-row">
+        <span class="info-icon">🕐</span>
+        <span class="info-text" id="spaceTime"></span>
+      </div>
+      <div class="info-row">
+        <span class="info-icon">📞</span>
+        <span class="info-text" id="spacePhone"></span>
+      </div>
+    </div>
+    
+    <div class="info-section">
+      <div class="section-title">设施服务</div>
+      <div class="facilities-grid" id="spaceFacilities">
+        <!-- 动态渲染 -->
+      </div>
+    </div>
+    
+    <div class="info-section">
+      <div class="section-title">场地介绍</div>
+      <div class="description-text" id="spaceDescription"></div>
+    </div>
+    
+    <div class="info-section">
+      <div class="section-title">预约须知</div>
+      <div class="description-text" id="spaceNotice"></div>
+    </div>
+    
+    <div style="height: 80px;"></div>
+    
+    <div class="bottom-bar">
+      <div>
+        <span class="price-label">价格</span>
+        <span class="price-value" id="spacePrice"></span>
+        <span class="price-unit" id="spaceUnit"></span>
+      </div>
+      <button class="btn" onclick="showPage('booking')">立即预约</button>
+    </div>
+  </div>
+
+  <!-- 日历/近期活动页 -->
+  <div class="page calendar-page" id="calendarPage">
+    <div class="calendar-header">
+      <h2 class="page-title">📅 近期活动</h2>
+    </div>
+    
+    <div class="calendar-section">
+      <div class="section-title">本月活动安排</div>
+      <div class="event-list" id="eventList">
+        <div class="event-card">
+          <div class="event-date">
+            <span class="event-day">15</span>
+            <span class="event-month">3月</span>
+          </div>
+          <div class="event-info">
+            <h3 class="event-title">创业分享会</h3>
+            <p class="event-desc">邀请成功创业者分享经验</p>
+            <span class="event-time">14:00-16:00</span>
+          </div>
+        </div>
+        <div class="event-card">
+          <div class="event-date">
+            <span class="event-day">20</span>
+            <span class="event-month">3月</span>
+          </div>
+          <div class="event-info">
+            <h3 class="event-title">产品路演日</h3>
+            <p class="event-desc">优秀项目路演展示</p>
+            <span class="event-time">09:00-17:00</span>
+          </div>
+        </div>
+        <div class="event-card">
+          <div class="event-date">
+            <span class="event-day">25</span>
+            <span class="event-month">3月</span>
+          </div>
+          <div class="event-info">
+            <h3 class="event-title">投资人见面会</h3>
+            <p class="event-desc">与知名投资人面对面交流</p>
+            <span class="event-time">14:00-17:00</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="calendar-section">
+      <div class="section-title">可预约时段预览</div>
+      <div class="calendar-preview" id="calendarPreview">
+        <!-- 动态渲染日历 -->
+      </div>
+    </div>
+    
+    <div style="height: 80px;"></div>
+  </div>
+
+  <!-- 预约页 -->
+  <div class="page booking-page" id="bookingPage">
+    <div class="venue-info">
+      <img src="" class="venue-thumb" id="bookingImage" alt="场地">
+      <div class="venue-basic">
+        <span class="venue-name" id="bookingName"></span>
+        <span class="venue-price" id="bookingPrice"></span>
+      </div>
+    </div>
+    
+    <div class="card">
+      <div class="section-title">选择日期</div>
+      <div class="date-list" id="dateList">
+        <!-- 动态渲染 -->
+      </div>
+    </div>
+    
+    <div class="card">
+      <div class="section-header">
+        <span class="section-title">选择时段</span>
+        <div class="legend">
+          <div class="legend-item">
+            <div class="dot available"></div>
+            <span>可预约</span>
+          </div>
+          <div class="legend-item">
+            <div class="dot selected"></div>
+            <span>已选择</span>
+          </div>
+          <div class="legend-item">
+            <div class="dot booked"></div>
+            <span>已约满</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="time-grid" id="timeGrid">
+        <!-- 动态渲染 -->
+      </div>
+    </div>
+    
+    <div class="bottom-bar">
+      <div class="selection-info">
+        <span class="selection-label">已选 <span id="selectedCount">0</span> 个时段</span>
+        <span class="selection-total">合计 <span class="price" id="totalPrice">0</span></span>
+      </div>
+      <button class="btn" id="confirmBookingBtn" onclick="confirmBooking()" disabled>确认预约</button>
+    </div>
+  </div>
+
+  <!-- 订单页 -->
+  <div class="page order-page" id="orderPage">
+    <div class="card">
+      <div class="section-title">订单信息</div>
+      <div class="venue-item">
+        <img src="" class="venue-image" id="orderImage" alt="场地">
+        <div class="venue-detail">
+          <span class="venue-name" id="orderVenueName"></span>
+          <span class="venue-type" id="orderVenueType"></span>
+        </div>
+      </div>
+      <div class="form-row">
+        <span class="form-label">预约日期</span>
+        <span class="form-value" id="orderDate"></span>
+      </div>
+      <div class="form-row">
+        <span class="form-label">预约时段</span>
+        <span class="form-value" id="orderTime"></span>
+      </div>
+      <div class="form-row">
+        <span class="form-label">时长</span>
+        <span class="form-value" id="orderDuration"></span>
+      </div>
+    </div>
+    
+    <div class="card">
+      <div class="section-title">联系人信息</div>
+      <div class="form-item">
+        <label class="form-input-label">姓名</label>
+        <input type="text" class="form-input" id="contactName" placeholder="请输入联系人姓名">
+      </div>
+      <div class="form-item">
+        <label class="form-input-label">手机号</label>
+        <input type="tel" class="form-input" id="contactPhone" placeholder="请输入手机号" maxlength="11">
+      </div>
+      <div class="form-item">
+        <label class="form-input-label">备注</label>
+        <textarea class="form-textarea" id="contactRemark" placeholder="如有特殊需求请在此填写（选填）"></textarea>
+      </div>
+    </div>
+    
+    <div class="card">
+      <div class="section-title">费用明细</div>
+      <div class="price-row">
+        <span class="form-label">场地费用</span>
+        <span class="form-value" id="orderPrice"></span>
+      </div>
+      <div class="price-row">
+        <span class="form-label">服务费</span>
+        <span class="form-value">¥0</span>
+      </div>
+      <div class="price-row total">
+        <span class="form-label">合计</span>
+        <span class="form-value" id="orderTotal"></span>
+      </div>
+    </div>
+    
+    <div style="height: 80px;"></div>
+    
+    <div class="bottom-bar">
+      <div class="total-section">
+        <span class="total-label">合计:</span>
+        <span class="total-price" id="orderTotalBottom"></span>
+      </div>
+      <button class="btn" onclick="submitOrder()">提交预约</button>
+    </div>
+  </div>
+
+  <!-- 个人中心页 -->
+  <div class="page profile-page" id="profilePage">
+    <div class="user-header">
+      <div class="user-info" id="userInfo">
+        <div class="avatar">👤</div>
+        <div>
+          <div class="nickname" id="userNickname">点击登录</div>
+          <div class="phone" id="userPhone" style="display: none;"></div>
+          <div class="tip" id="userTip">登录后查看预约记录</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="stats-section">
+      <div class="stats-grid">
+        <div class="stats-item">
+          <span class="stats-num" id="statAll">0</span>
+          <span class="stats-label">全部订单</span>
+        </div>
+        <div class="stats-item">
+          <span class="stats-num" id="statConfirmed">0</span>
+          <span class="stats-label">进行中</span>
+        </div>
+        <div class="stats-item">
+          <span class="stats-num" id="statCompleted">0</span>
+          <span class="stats-label">已完成</span>
+        </div>
+        <div class="stats-item">
+          <span class="stats-num" id="statCancelled">0</span>
+          <span class="stats-label">已取消</span>
+        </div>
+      </div>
+    </div>
+    
+    <div style="padding: 0 12px; margin-bottom: 12px;">
+      <div style="font-size: 16px; font-weight: 600; color: #333;">我的预约</div>
+    </div>
+    
+    <div id="orderList">
+      <!-- 动态渲染 -->
+    </div>
+    
+    <div class="menu-section">
+      <div class="menu-item" id="contactBtn">
+        <span class="menu-icon">💬</span>
+        <span class="menu-text">联系客服</span>
+        <span class="menu-arrow">></span>
+      </div>
+      <div class="menu-item" id="logoutBtn" style="display: none;">
+        <span class="menu-icon">🚪</span>
+        <span class="menu-text">退出登录</span>
+        <span class="menu-arrow">></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 底部导航 - 5个板块 -->
+  <div class="tab-bar" id="tabBar">
+    <div class="tab-item active" data-page="home">
+      <span class="tab-icon">🏠</span>
+      <span class="tab-text">首页</span>
+    </div>
+    <div class="tab-item" data-page="space">
+      <span class="tab-icon">🏢</span>
+      <span class="tab-text">空间介绍</span>
+    </div>
+    <div class="tab-item" data-page="calendar">
+      <span class="tab-icon">📅</span>
+      <span class="tab-text">近期活动</span>
+    </div>
+    <div class="tab-item" data-page="booking">
+      <span class="tab-icon">✏️</span>
+      <span class="tab-text">预约</span>
+    </div>
+    <div class="tab-item" data-page="profile">
+      <span class="tab-icon">👤</span>
+      <span class="tab-text">我的</span>
+    </div>
+  </div>
+
+  <script src="./js/data.js"></script>
+  <script src="./js/app.js"></script>
+</body>
+</html>
